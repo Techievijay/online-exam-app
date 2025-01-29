@@ -1,0 +1,93 @@
+.exam-page {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f9f9f9;
+    user-select: none; /* Prevents text selection */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Timer styling */
+.exam-header {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    padding: 10px;
+}
+
+/* Make sure the timer text is visible and noticeable */
+.exam-header p {
+    font-size: 20px;
+    color: red;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+/* Container for the exam questions */
+.exam-content {
+    width: 80%;
+    max-width: 800px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    border-radius: 8px;
+}
+
+/* Options (MCQ choices) */
+.option {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+/* Navigation buttons */
+.navigation {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Submit button */
+.submit {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Submit button hover effect */
+.submit:hover {
+    background-color: #0056b3;
+}
+
+/* Prevent right-click, copy, paste, and selection */
+body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Prevent selection for input fields as well */
+input, button, label {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Ensure full-screen mode styles */
+.fullscreen {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}

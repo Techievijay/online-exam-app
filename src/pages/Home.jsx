@@ -1,32 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { examCategories } from '../data/categories';
 
 
-const categories = [
-  {
-    id: 1,
-    title: "React",
-    questions: [
-      { question: "What is React?", options: ["Library", "Framework", "Language"], correct: 0 },
-      { question: "What is JSX?", options: ["A markup language", "A JavaScript extension", "A CSS style"], correct: 1 }
-    ],
-    duration: 30
-  },
-  {
-    id: 2,
-    title: "JavaScript",
-    questions: [
-      { question: "When an operator’s value is NULL, the typeof returned by the unary operator is?", options: ["Boolean", "Undefined", "Object", "integer"], correct: 2 },
-      { question: "Which function is used to serialize an object into a JSON string in Javascript?", options: ["stringify() ", "parse()", "convert()","None of the Above"], correct: 0 }
-    ],
-    duration: 2
-  }
-];
-
+const categories = examCategories;
 const Home = () => {
   return (
     <div className="home">
-      <h1>Online Exam Dashboard</h1>
+      
+      <h2 className="text-xl font-bold text-blue-500">Online Exam Dashboard</h2>
+
       <div className="categories">
         {categories.map((category) => (
           <div key={category.id} className="category-card">

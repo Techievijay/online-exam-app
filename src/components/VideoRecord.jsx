@@ -1,45 +1,71 @@
-import React, { useCallback, useRef, useState, useEffect } from "react";
+/* eslint-disable react/display-name */
+/* eslint-disable no-unused-vars */
+import React, { useCallback, useState, useEffect, forwardRef, useImperativeHandle, useRef } from "react";
 import Webcam from "react-webcam";
 
-const VideoRecord = () => {
-  const webcamRef = useRef(null);
+const VideoRecord = forwardRef((_, ref) => {
+  const [webcamStream, setWebcamStream] = useState(null);
   const mediaRecorderRef = useRef(null);
   const [capturing, setCapturing] = useState(false);
   const [recordedChunks, setRecordedChunks] = useState([]);
 
-  const handleDataAvailable = useCallback(
-    ({ data }) => {
-      if (data.size > 0) {
-        setRecordedChunks((prev) => prev.concat(data));
+  useEffect(() => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      .then(stream => {
+        setWebcamStream(stream);
+        console.log("Webcam stream is ready.");
+      })
+      .catch(error => console.error("Error accessing webcam:", error));
+  }, []);
+
+  useImperativeHandle(ref, () => ({
+    startRecording: () => {
+      if (webcamStream) {
+        handleStartCaptureClick();
+      } else {
+        console.warn("Trying to start recording before webcam is ready.");
       }
     },
-    [setRecordedChunks]
-  );
+    stopRecording: handleStopCaptureClick,
+  }));
+
+  const handleDataAvailable = useCallback(({ data }) => {
+    if (data.size > 0) {
+      setRecordedChunks((prev) => [...prev, data]);
+    }
+  }, []);
 
   const handleStartCaptureClick = useCallback(() => {
+    if (!webcamStream) {
+      console.error("Webcam stream not available yet.");
+      return;
+    }
+    console.log("Starting video recording...");
     setCapturing(true);
-    setRecordedChunks([]); // Clear previous recordings
-    mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
-      mimeType: "video/webm",
-    });
+    setRecordedChunks([]);
+    mediaRecorderRef.current = new MediaRecorder(webcamStream, { mimeType: "video/webm" });
     mediaRecorderRef.current.addEventListener("dataavailable", handleDataAvailable);
     mediaRecorderRef.current.start();
-  }, [webcamRef, setCapturing, handleDataAvailable]);
+  }, [webcamStream, handleDataAvailable]);
 
   const handleStopCaptureClick = useCallback(() => {
-    mediaRecorderRef.current.stop();
-    setCapturing(false);
-  }, [mediaRecorderRef, setCapturing]);
+    if (mediaRecorderRef.current) {
+      console.log("Stopping video recording...");
+      mediaRecorderRef.current.stop();
+      setCapturing(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (recordedChunks.length > 0) {
+      console.log("Downloading video...");
       const blob = new Blob(recordedChunks, { type: "video/webm" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       document.body.appendChild(a);
       a.style = "display: none";
       a.href = url;
-      a.download = "react-webcam-stream-capture.webm";
+      a.download = "exam-recording.webm";
       a.click();
       window.URL.revokeObjectURL(url);
       setRecordedChunks([]);
@@ -47,15 +73,18 @@ const VideoRecord = () => {
   }, [recordedChunks]);
 
   return (
-    <div className="Container">
-      <Webcam audio={false} ref={webcamRef} style={{ display: "none" }} />
-      {capturing ? (
-        <button onClick={handleStopCaptureClick}>Stop Capture</button>
-      ) : (
-        <button onClick={handleStartCaptureClick}>Start Capture</button>
-      )}
+    <div>
+      <Webcam
+        audio={true}
+        videoConstraints={{ facingMode: "user" }}
+        onUserMedia={(stream) => {
+          setWebcamStream(stream);
+          console.log("Webcam initialized inside Webcam component.");
+        }}
+        style={{ display: "none" }}
+      />
     </div>
   );
-};
+});
 
 export default VideoRecord;

@@ -1,35 +1,19 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import VideoRecord from "../components/VideoRecord";
 import "../styles/exampage.css";
+import { examCategories } from "../data/categories";
 
-
-const categories = [
-  {
-    id: 1,
-    title: "React",
-    questions: [
-      { question: "What is React?", options: ["Library", "Framework", "Language"], correct: 0 },
-      { question: "What is JSX?", options: ["A markup language", "A JavaScript extension", "A CSS style"], correct: 1 }
-    ],
-    duration: 30
-  },
-  {
-    id: 2,
-    title: "JavaScript",
-    questions: [
-      { question: "When an operator’s value is NULL, the typeof returned by the unary operator is?", options: ["Boolean", "Undefined", "Object", "integer"], correct: 2 },
-      { question: "Which function is used to serialize an object into a JSON string in Javascript?", options: ["stringify() ", "parse()", "convert()", "None of the Above"], correct: 0 }
-    ],
-    duration: 2
-  }
-];
+const categories = examCategories
 
 const Exam = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [demoUser, setDemoUser] = useState({ id: 1, fullName: 'John david', email: 'johndavid23@gmail.com', mobile: 1234589, isLogged: true, mediaURL:'' })
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [timeLeft, setTimeLeft] = useState(0);
+  const examRef = useRef(null);
+  const videoRef = useRef(null);
 
   const category = categories.find((cat) => cat.id.toString() === id);
   if (!category) {
@@ -38,26 +22,32 @@ const Exam = () => {
   }
 
   const { questions, duration } = category;
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState({});
-  const [timeLeft, setTimeLeft] = useState(duration * 60); // Duration in seconds
-  const examRef = useRef(null);
 
   useEffect(() => {
+    setTimeLeft(duration * 60);
     enterFullScreen();
+
+    // Wait a moment before starting recording to ensure webcam is ready
+    setTimeout(() => {
+      if (videoRef.current) {
+        console.log("Starting recording from Exam component...");
+        videoRef.current.startRecording();
+      } else {
+        console.warn("Video reference not ready yet.");
+      }
+    }, 2000);
 
     // Start countdown timer
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          handleAutoSubmit(); // Auto-submit when timer ends
+          handleAutoSubmit();
         }
         return prev - 1;
       });
     }, 1000);
 
-    // Disable right-click and other actions
     document.addEventListener("contextmenu", handleContextMenu);
     document.addEventListener("keydown", preventKeyShortcuts);
     document.addEventListener("cut", preventCopyPaste);
@@ -76,16 +66,9 @@ const Exam = () => {
     };
   }, []);
 
-  useEffect(() => {
-    console.log("Updated demoUser:", demoUser);
-  }, [demoUser]); // Runs whenever demoUser is updated
-
-
   const enterFullScreen = () => {
     if (examRef.current && !document.fullscreenElement) {
-      examRef.current.requestFullscreen().catch((err) => {
-        console.error("Error enabling fullscreen:", err);
-      });
+      examRef.current.requestFullscreen().catch((err) => console.error("Error enabling fullscreen:", err));
     }
   };
 
@@ -93,6 +76,11 @@ const Exam = () => {
     if (document.fullscreenElement) {
       document.exitFullscreen();
     }
+  };
+
+  
+  const handleAnswerChange = (index) => {
+    setAnswers((prev) => ({ ...prev, [currentQuestion]: index }));
   };
 
   const handleContextMenu = (event) => {
@@ -110,19 +98,6 @@ const Exam = () => {
     }
   };
 
-  const preventCopyPaste = (event) => {
-    event.preventDefault();
-    alert("Copy, cut, and paste actions are disabled during the exam.");
-  };
-
-  const preventSelection = (event) => {
-    event.preventDefault();
-  };
-
-  const handleAnswerChange = (index) => {
-    setAnswers((prev) => ({ ...prev, [currentQuestion]: index }));
-  };
-
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
@@ -135,22 +110,30 @@ const Exam = () => {
     }
   };
 
+  const preventCopyPaste = (event) => {
+    event.preventDefault();
+    alert("Copy, cut, and paste actions are disabled during the exam.");
+  };
+
+  const preventSelection = (event) => {
+    event.preventDefault();
+  };
   const handleSubmit = () => {
-    exitFullScreen(); // Exit fullscreen mode on submit
+    exitFullScreen();
 
-    const score = Object.keys(answers).reduce((acc, qIndex) => {
-      return acc + (questions[qIndex].correct === answers[qIndex] ? 1 : 0);
-    }, 0);
-
-    setDemoUser(prevState => {
-      const updatedUser = { ...prevState, score: score };
-      console.log("Updated User:", updatedUser); // This will show the correct value
-      return updatedUser;
-    });
+    const score = Object.keys(answers).reduce((acc, qIndex) => (
+      acc + (questions[qIndex].correct === answers[qIndex] ? 1 : 0)
+    ), 0);
 
     alert(`Your score is ${score}/${questions.length}`);
 
-    navigate("/"); // Navigate back to home
+    // Stop and download video
+    if (videoRef.current) {
+      console.log("Stopping recording from Exam component...");
+      videoRef.current.stopRecording();
+    }
+
+    navigate("/");
   };
 
   const handleAutoSubmit = () => {
@@ -160,13 +143,17 @@ const Exam = () => {
 
   return (
     <div className="exam-page" ref={examRef}>
+      <VideoRecord ref={videoRef} /> 
+
       <div className="exam-header">
         <h1>{category.title} Exam</h1>
         <p>Time Left: {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, "0")}</p>
       </div>
+
       <div className="exam-content">
         <p>{currentQuestion + 1} / {questions.length} Questions</p>
         <p>{questions[currentQuestion]?.question}</p>
+
         {questions[currentQuestion]?.options.map((option, index) => (
           <div key={index} className="option">
             <input
@@ -178,11 +165,13 @@ const Exam = () => {
             <label>{option}</label>
           </div>
         ))}
+
         <div className="navigation">
-          <button onClick={handlePrev} disabled={currentQuestion === 0}>Prev</button>
-          <button onClick={handleNext} disabled={currentQuestion === questions.length - 1}>Next</button>
+        <button onClick={handlePrev} disabled={currentQuestion === 0}>Prev</button>
+        <button onClick={handleNext} disabled={currentQuestion === questions.length - 1}>Next</button>
+        
         </div>
-        <button className="submit" onClick={handleSubmit}>Submit</button>
+        <button onClick={handleSubmit}>Submit</button>
       </div>
     </div>
   );

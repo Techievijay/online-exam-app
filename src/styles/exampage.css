@@ -1,7 +1,7 @@
 .exam-page {
     padding: 20px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     background-color: #f9f9f9;
     user-select: none; /* Prevents text selection */
@@ -36,6 +36,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
     border-radius: 8px;
+    overflow: hidden; /* Ensures content is not spilling out */
 }
 
 /* Options (MCQ choices) */
@@ -90,4 +91,38 @@ input, button, label {
     width: 100%;
     height: 100vh;
     overflow: hidden;
+}
+
+/* Timeline Styles */
+.right-section .timeline {
+    position: sticky;
+    top: 10px; /* Adjust this based on your design */
+    max-height: 250px; /* Limit the height of the timeline */
+    overflow-y: scroll; /* Enable scrolling when there are more than 10 questions */
+}
+
+/* Hide the scrollbar while keeping scrolling functional */
+.right-section .timeline::-webkit-scrollbar {
+    width: 0; /* Hides the scrollbar for WebKit browsers (Chrome, Safari, etc.) */
+    height: 0;
+}
+
+.right-section .timeline {
+    -ms-overflow-style: none; /* Hides the scrollbar for Internet Explorer and Edge */
+    scrollbar-width: none; /* Hides the scrollbar for Firefox */
+}
+/* Styles for the question timeline */
+.question-timeline-circle {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.question-timeline-circle:hover {
+    background-color: #2d87f0;
+}
+
+/* Adding scrollbar for long question timelines */
+.right-section .timeline {
+    max-height: 250px;
+    overflow-y: auto;
 }

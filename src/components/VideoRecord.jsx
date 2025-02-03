@@ -75,7 +75,7 @@ const VideoRecord = forwardRef((_, ref) => {
   return (
     <div>
       <Webcam
-        audio={true}
+        audio={false}
         videoConstraints={{ facingMode: "user" }}
         onUserMedia={(stream) => {
           setWebcamStream(stream);

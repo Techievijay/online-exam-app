@@ -160,17 +160,21 @@ const Exam = () => {
 
           {/* Options */}
           {questions[currentQuestion]?.options.map((option, index) => (
-            <div key={index} className="option mb-2">
-              <input
-                type="radio"
-                name="answer"
-                checked={answers[currentQuestion] === index}
-                onChange={() => handleAnswerChange(index)}
-                className="mr-2"
-              />
-              <label>{option}</label>
-            </div>
-          ))}
+  <div key={index} className="option mb-4">
+    <input
+      type="radio"
+      name="answer"
+      checked={answers[currentQuestion] === index}
+      onChange={() => handleAnswerChange(index)}
+      id={`option-${index}`}  // Added an id for better accessibility
+    />
+    <label htmlFor={`option-${index}`}>{option}</label>
+  </div>
+))}
+
+
+
+
         </div>
 
         {/* Navigation Buttons */}

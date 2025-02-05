@@ -4,7 +4,7 @@
     flex-direction: row;
     align-items: center;
     background-color: #f9f9f9;
-    user-select: none; /* Prevents text selection */
+    user-select: none; 
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -19,13 +19,85 @@
     padding: 10px;
 }
 
-/* Make sure the timer text is visible and noticeable */
+
 .exam-header p {
     font-size: 20px;
     color: red;
     font-weight: bold;
     margin-top: 5px;
 }
+
+/* Wrapper around the radio button and label */
+.option {
+    margin-bottom: 15px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    border-radius: 8px; /* Rounded corners around the entire option */
+}
+
+/* Style the radio input button */
+.option input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    background-color: #fff;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* Label styling for the radio button */
+.option label {
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    padding: 12px 20px;
+    border-radius: 8px; /* Rounded corners for the label */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    transition: all 0.3s ease;
+    width: 100%;
+    background-color: #fff; /* Ensure background is white by default */
+    border: 2px solid #ccc;  /* Light border around the label */
+}
+
+/* When radio button is selected, apply the light blue border around both input and label */
+.option input[type="radio"]:checked + label {
+    border-color: #2d87f0;  /* Light blue border around both radio button and label */
+    background-color: rgba(45, 135, 240, 0.1);  /* Light blue background when selected */
+    color: #2d87f0;  /* Change text color to light blue */
+}
+
+/* When radio button is selected, apply the light blue border around the wrapper (radio + label) */
+.option input[type="radio"]:checked {
+    border-color: #2d87f0;  /* Light blue border around the radio button */
+    background-color: #2d87f0;  /* Light blue fill for the radio button */
+    box-shadow: 0 0 5px rgba(45, 135, 240, 0.5);
+}
+
+/* On hover, highlight the label and add light blue border */
+.option:hover {
+    border-color: #2d87f0;
+}
+
+.option:hover label {
+    border-color: #2d87f0;
+    background-color: rgba(45, 135, 240, 0.1); /* Light blue background on hover */
+}
+
+/* Optional: Disabled label text selection for better UX */
+.option label {
+    user-select: none;
+}
+
 
 /* Container for the exam questions */
 .exam-content {

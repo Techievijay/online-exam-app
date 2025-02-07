@@ -17,18 +17,7 @@ const VideoRecord = forwardRef((_, ref) => {
       .catch((error) => console.error("Error accessing webcam:", error));
   }, []);
 
-  // useImperativeHandle(ref, () => ({
-  //   startRecording: () => {
-  //     if (webcamStream) {
-  //       handleStartCaptureClick();
-  //     } else {
-  //       console.warn("Trying to start recording before webcam is ready.");
-  //     }
-  //   },
-  //   stopRecording: async () => {
-  //     await handleStopCaptureClick();
-  //   },
-  // }));
+ 
 
   useImperativeHandle(ref, () => ({
     startRecording: () => {

@@ -1,0 +1,29 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: #007bff;
+    color: white;
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+  }
+  
+  .cart-icon {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -12px;
+    background: rgb(17, 0, 255);
+    color: white;
+    border-radius: 100%;
+    padding: 4px 8px;
+    font-size: 14px;
+  }
+  

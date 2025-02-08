@@ -1,9 +1,10 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaExclamationCircle, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "../styles/exampage.css";
 import { examCategories } from "../data/categories";
-import VideoRecord from '../components/VideoRecord'
+import VideoRecord from '../components/VideoRecord';
+
 const categories = examCategories;
 
 const Exam = () => {
@@ -24,6 +25,7 @@ const Exam = () => {
   }
 
   const { questions, duration } = category;
+  let tabSwitchAttempted = false; // Variable to track tab switch attempts
 
   const enterFullScreen = () => {
     if (examRef.current && !document.fullscreenElement) {
@@ -37,7 +39,6 @@ const Exam = () => {
     }
   };
 
-
   useEffect(() => {
     enterFullScreen(); 
     setTimeLeft(duration * 60);
@@ -49,6 +50,7 @@ const Exam = () => {
         console.warn("Video reference not ready yet.");
       }
     }, 2000);
+
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
@@ -58,13 +60,25 @@ const Exam = () => {
         return prev - 1;
       });
     }, 1000);
+
     document.addEventListener("contextmenu", handleContextMenu);
     document.addEventListener("keydown", preventKeyShortcuts);
     document.addEventListener("cut", preventCopyPaste);
     document.addEventListener("copy", preventCopyPaste);
     document.addEventListener("paste", preventCopyPaste);
     document.addEventListener("selectstart", preventSelection);
-    return () =>{
+
+    // Prevent ESC and other exits from fullscreen
+    document.addEventListener("keydown", preventExitFullscreen);
+
+    // Handle tab switching
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // Disable developer tools
+    document.addEventListener("keydown", handleDeveloperTools, true);
+    document.addEventListener("contextmenu", handleContextMenu, true);
+
+    return () => {
       clearInterval(timer);
       document.removeEventListener("contextmenu", handleContextMenu);
       document.removeEventListener("keydown", preventKeyShortcuts);
@@ -72,16 +86,43 @@ const Exam = () => {
       document.removeEventListener("copy", preventCopyPaste);
       document.removeEventListener("paste", preventCopyPaste);
       document.removeEventListener("selectstart", preventSelection);
-      
+
+      // Cleanup the prevent exit fullscreen listener
+      document.removeEventListener("keydown", preventExitFullscreen);
+
+      // Clean up the tab visibility change event
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+
+      // Remove developer tools listeners
+      document.removeEventListener("keydown", handleDeveloperTools, true);
+      document.removeEventListener("contextmenu", handleContextMenu, true);
     };
   }, []);
+
+  const handleVisibilityChange = () => {
+    if (document.hidden) {
+      if (tabSwitchAttempted) {
+        alert("You have been redirected due to multiple tab switches.");
+        navigate("/"); // Redirect to home page if user tries to switch tabs again
+      } else {
+        tabSwitchAttempted = true; // First attempt to switch tab
+        alert("Warning: You are not allowed to switch tabs during the exam.");
+      }
+    }
+  };
+
+  const handleDeveloperTools = (event) => {
+    if (event.key === "F12" || (event.ctrlKey && event.shiftKey && event.key === "I")) {
+      event.preventDefault();
+      alert("Developer tools are disabled during the exam.");
+    }
+  };
 
   const progressPercentage = ((currentQuestion + 1) / questions.length) * 100;
 
   const handleAnswerChange = (index) => {
     setAnswers((prev) => ({ ...prev, [currentQuestion]: index }));
   };
-
 
   const handleContextMenu = (event) => {
     event.preventDefault();
@@ -116,6 +157,13 @@ const Exam = () => {
     event.preventDefault();
   };
 
+  const preventExitFullscreen = (event) => {
+    if (event.key === "Escape" || event.key === "F11") {
+      event.preventDefault();
+      alert("Exiting fullscreen is disabled during the exam.");
+    }
+  };
+
   const handleSubmit = async () => {
     exitFullScreen();
     const score = Object.keys(answers).reduce(
@@ -123,17 +171,15 @@ const Exam = () => {
       0
     );
     alert(`Your score is ${score}/${questions.length}`);
-  
+
     if (videoRef.current) {
       console.log("Stopping recording from Exam component...");
       await videoRef.current.stopRecording(); // Wait for recording to stop & download
     }
-  
+
     navigate("/");
   };
-  
 
-  
   const handleAutoSubmit = () => {
     alert("Time's up! Your exam has been submitted automatically.");
     handleSubmit();
@@ -141,9 +187,8 @@ const Exam = () => {
 
   return (
     <div className="exam-page flex flex-col" ref={examRef}>
-   
-   <VideoRecord ref={videoRef} />
-      <div className="timer-section text-center p-4 bg-white shadow-md fixed top-0 w-full">
+      <VideoRecord ref={videoRef} />
+      <div className="timer-section text-center p-4 bg-red-50 shadow-md fixed top-0 w-full">
         <h2 className="text-lg font-bold">
           Time Left: {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, "0")}
         </h2>
@@ -152,7 +197,7 @@ const Exam = () => {
 
       {/* Exam Content */}
       <div className="exam-content w-full p-6 flex flex-col justify-center items-center mt-16">
-        <h1 className="text-2xl font-bold mb-4">{category.title} Exam</h1>
+        
 
         {/* Question Section */}
         <div className="question-section w-full max-w-3xl">

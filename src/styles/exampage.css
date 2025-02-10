@@ -1,200 +1,241 @@
-.exam-page {
-    padding: 20px;
+/* General Styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+  }
+  
+  /* Exam Page Container */
+  .exam-page {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
     align-items: center;
-    background-color: #f9f9f9;
-    user-select: none; 
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-}
-
-/* Timer styling */
-.exam-header {
+    background-color: #ffffff;
+  }
+  
+  /* Navbar (Timer Section) */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px 20px;
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+  
+  /* Left Section: Logo, Title, and Subtitle */
+  .logo {
+    width: 40px;
+    height: 40px;
+    background-color: #0094d9;
+    border-radius: 50%;
+  }
+  
+  .navbar h1 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #0094d9;
+  }
+  
+  .navbar h2 {
+    font-size: 14px;
+    color: #777;
+  }
+  
+  /* Timer Section */
+  .navbar .text-center {
     text-align: center;
+  }
+  
+  .navbar progress {
+    width: 200px;
+    height: 8px;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  
+  .navbar progress::-webkit-progress-bar {
+    background-color: #ddd;
+  }
+  
+  .navbar progress::-webkit-progress-value {
+    background-color: #0094d9;
+  }
+  
+  /* Right Section: Help & Submit Buttons */
+  .btn-help, .btn-submit {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #0094d9;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    font-size: 14px;
+  }
+  
+  .btn-help:hover, .btn-submit:hover {
+    background-color: #007bb5;
+  }
+  
+  /* Exam Content Section */
+  .exam-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 80vh;
+    justify-content: center;
+    padding: 50px 20px 20px; /* Push content below navbar */
+    position: relative;
+  }
+  
+  /* Ensure questions and options are left-aligned */
+  .question-section {
+    width: 100%;
+    max-width: 600px;
+    text-align: left;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .question-section p {
     font-size: 18px;
     font-weight: bold;
     color: #333;
-    padding: 10px;
-}
-
-
-.exam-header p {
-    font-size: 20px;
-    color: red;
-    font-weight: bold;
-    margin-top: 5px;
-}
-
-/* Wrapper around the radio button and label */
-.option {
-    margin-bottom: 15px;
-    font-size: 16px;
+  }
+  
+  .option {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
     cursor: pointer;
-    transition: all 0.3s ease;
+  }
+  
+  .option:hover {
+    background-color: #f0f8ff;
+  }
+  
+  input[type="radio"] {
+    accent-color: #0094d9;
+  }
+  
+  /* Navigation Buttons */
+  .navigation {
+    display: flex;
+    justify-content: flex-end;
     width: 100%;
-    border-radius: 8px; /* Rounded corners around the entire option */
+    max-width: 600px;
+    margin-top: 20px;
+  }
+  
+  .btn-prev, .btn-next {
+    padding: 10px 20px;
+    background-color: #0094d9;
+    color: white;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+  }
+  
+  .btn-prev:disabled, .btn-next:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .btn-prev {
+    margin-right: 10px;
+  }
+  
+  .btn-prev:hover, .btn-next:hover {
+    background-color: #007bb5;
+  }
+  
+  /* Small Question Timeline (Fixed in Right Corner Above Exam Content) */
+  .fixed-question-timeline {
+    position: fixed;
+    top: 100px; /* Adjusted to be below the navbar */
+    right: 20px;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 1100; /* Ensure it's above other elements */
 }
 
-/* Style the radio input button */
-.option input[type="radio"] {
-    width: 20px;
-    height: 20px;
-    margin-right: 12px;
+  
+  .fixed-question-timeline button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .timeline-circle {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 50%;
     border: 2px solid #ccc;
-    background-color: #fff;
-    transition: all 0.3s ease;
+    font-size: 14px;
     cursor: pointer;
-    flex-shrink: 0;
-}
-
-/* Label styling for the radio button */
-.option label {
-    font-size: 16px;
-    color: #333;
-    cursor: pointer;
-    padding: 12px 20px;
-    border-radius: 8px; /* Rounded corners for the label */
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    transition: all 0.3s ease;
-    width: 100%;
-    background-color: #fff; /* Ensure background is white by default */
-    border: 2px solid #ccc;  /* Light border around the label */
-}
-
-/* When radio button is selected, apply the light blue border around both input and label */
-.option input[type="radio"]:checked + label {
-    border-color: #2d87f0;  /* Light blue border around both radio button and label */
-    background-color: rgba(45, 135, 240, 0.1);  /* Light blue background when selected */
-    color: #2d87f0;  /* Change text color to light blue */
-}
-
-/* When radio button is selected, apply the light blue border around the wrapper (radio + label) */
-.option input[type="radio"]:checked {
-    border-color: #2d87f0;  /* Light blue border around the radio button */
-    background-color: #2d87f0;  /* Light blue fill for the radio button */
-    box-shadow: 0 0 5px rgba(45, 135, 240, 0.5);
-}
-
-/* On hover, highlight the label and add light blue border */
-.option:hover {
-    border-color: #2d87f0;
-}
-
-.option:hover label {
-    border-color: #2d87f0;
-    background-color: rgba(45, 135, 240, 0.1); /* Light blue background on hover */
-}
-
-/* Optional: Disabled label text selection for better UX */
-.option label {
-    user-select: none;
-}
-
-
-/* Container for the exam questions */
-.exam-content {
-    width: 80%;
-    max-width: 800px;
-    background-color: #fff;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-    border-radius: 8px;
-    overflow: hidden; /* Ensures content is not spilling out */
-}
-
-/* Options (MCQ choices) */
-.option {
-    margin-bottom: 10px;
-    font-size: 16px;
-}
-
-/* Navigation buttons */
-.navigation {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-}
-
-/* Submit button */
-.submit {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #007BFF;
+  }
+  
+  .timeline-circle.answered {
+    background-color: #0094d9;
     color: white;
     border: none;
+  }
+  
+  /* Full Question Timeline Popup */
+  .full-timeline-popup {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .full-timeline-popup .popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .full-timeline-popup .close-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #0094d9;
+    color: white;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 14px;
+    font-weight: bold;
     cursor: pointer;
-}
-
-/* Submit button hover effect */
-.submit:hover {
-    background-color: #0056b3;
-}
-
-/* Prevent right-click, copy, paste, and selection */
-body {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-/* Prevent selection for input fields as well */
-input, button, label {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-/* Ensure full-screen mode styles */
-.fullscreen {
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-}
-
-/* Timeline Styles */
-.right-section .timeline {
-    position: sticky;
-    top: 10px; /* Adjust this based on your design */
-    max-height: 250px; /* Limit the height of the timeline */
-    overflow-y: scroll; /* Enable scrolling when there are more than 10 questions */
-}
-
-/* Hide the scrollbar while keeping scrolling functional */
-.right-section .timeline::-webkit-scrollbar {
-    width: 0; /* Hides the scrollbar for WebKit browsers (Chrome, Safari, etc.) */
-    height: 0;
-}
-
-.right-section .timeline {
-    -ms-overflow-style: none; /* Hides the scrollbar for Internet Explorer and Edge */
-    scrollbar-width: none; /* Hides the scrollbar for Firefox */
-}
-/* Styles for the question timeline */
-.question-timeline-circle {
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.question-timeline-circle:hover {
-    background-color: #2d87f0;
-}
-
-/* Adding scrollbar for long question timelines */
-.right-section .timeline {
-    max-height: 250px;
-    overflow-y: auto;
-}
+    border: none;
+  }
+  

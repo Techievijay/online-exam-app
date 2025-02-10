@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaExclamationCircle, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "../styles/exampage.css";
+import Quess from '../assets/quesslogo.png';
 import { examCategories } from "../data/categories";
 import VideoRecord from '../components/VideoRecord';
 
@@ -24,8 +25,8 @@ const Exam = () => {
     return null;
   }
 
-  const { questions, duration } = category;
-  let tabSwitchAttempted = false; // Variable to track tab switch attempts
+  const { questions, duration,title } = category;
+  let tabSwitchAttempted = false;
 
   const enterFullScreen = () => {
     if (examRef.current && !document.fullscreenElement) {
@@ -68,13 +69,8 @@ const Exam = () => {
     document.addEventListener("paste", preventCopyPaste);
     document.addEventListener("selectstart", preventSelection);
 
-    // Prevent ESC and other exits from fullscreen
     document.addEventListener("keydown", preventExitFullscreen);
-
-    // Handle tab switching
     document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    // Disable developer tools
     document.addEventListener("keydown", handleDeveloperTools, true);
     document.addEventListener("contextmenu", handleContextMenu, true);
 
@@ -86,14 +82,8 @@ const Exam = () => {
       document.removeEventListener("copy", preventCopyPaste);
       document.removeEventListener("paste", preventCopyPaste);
       document.removeEventListener("selectstart", preventSelection);
-
-      // Cleanup the prevent exit fullscreen listener
       document.removeEventListener("keydown", preventExitFullscreen);
-
-      // Clean up the tab visibility change event
       document.removeEventListener("visibilitychange", handleVisibilityChange);
-
-      // Remove developer tools listeners
       document.removeEventListener("keydown", handleDeveloperTools, true);
       document.removeEventListener("contextmenu", handleContextMenu, true);
     };
@@ -103,9 +93,9 @@ const Exam = () => {
     if (document.hidden) {
       if (tabSwitchAttempted) {
         alert("You have been redirected due to multiple tab switches.");
-        navigate("/"); // Redirect to home page if user tries to switch tabs again
+        navigate("/"); 
       } else {
-        tabSwitchAttempted = true; // First attempt to switch tab
+        tabSwitchAttempted = true; 
         alert("Warning: You are not allowed to switch tabs during the exam.");
       }
     }
@@ -188,23 +178,40 @@ const Exam = () => {
   return (
     <div className="exam-page flex flex-col" ref={examRef}>
       <VideoRecord ref={videoRef} />
-      <div className="timer-section text-center p-4 bg-red-50 shadow-md fixed top-0 w-full">
-        <h2 className="text-lg font-bold">
-          Time Left: {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, "0")}
-        </h2>
-        <progress value={progressPercentage} max={100} className="w-1/2 h-2 bg-gray-300 rounded-full mt-2" />
+      
+      {/* Navbar */}
+      <div className="navbar flex items-center justify-between bg-white p-4 shadow-md">
+        {/* Left Section: Logo, Title, and Subtitle */}
+        <div className="flex flex-col">
+          <div className="flex items-center">
+        <img className="w-22 h-10 mr-2" src={Quess} alt="logo" />
+            <div className="ml-3">
+              <h1 className="text-2xl font-bold text-blue-500">{title}</h1>
+              <h2 className="text-sm text-gray-500">Instruction</h2>
+            </div>
+          </div>
+        </div>
+
+        {/* Center Section: Timer and Question Progress */}
+        <div className="text-center">
+          <h2 className="text-lg font-bold">
+            Time Left: {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, "0")}
+          </h2>
+          <progress value={progressPercentage} max={100} className="w-1/2 h-2 bg-gray-300 rounded-full mt-2" />
+        </div>
+
+        {/* Right Section: Help and Submit Buttons */}
+        <div className="flex space-x-4">
+  <a href="#help" className="btn-help">Help</a>
+  <button onClick={handleSubmit} className="btn-submit">Submit</button>
+</div>
       </div>
 
       {/* Exam Content */}
       <div className="exam-content w-full p-6 flex flex-col justify-center items-center mt-16">
-        
-
-        {/* Question Section */}
         <div className="question-section w-full max-w-3xl">
           <p className="text-lg font-semibold">{currentQuestion + 1} / {questions.length} Questions</p>
           <p className="text-xl my-4">{questions[currentQuestion]?.question}</p>
-
-          {/* Options */}
           {questions[currentQuestion]?.options.map((option, index) => (
             <div key={index} className="option mb-4">
               <input
@@ -212,49 +219,43 @@ const Exam = () => {
                 name="answer"
                 checked={answers[currentQuestion] === index}
                 onChange={() => handleAnswerChange(index)}
-                id={`option-${index}`}
+                id={option}
               />
-              <label htmlFor={`option-${index}`}>{option}</label>
+              <label htmlFor={option}>{option}</label>
             </div>
           ))}
         </div>
 
         {/* Navigation Buttons */}
         <div className="navigation w-full max-w-3xl flex justify-between mt-4">
-          <button onClick={handlePrev} disabled={currentQuestion === 0} className="btn-prev">Prev</button>
-          <button onClick={handleNext} disabled={currentQuestion === questions.length - 1} className="btn-next">Next</button>
+          <button onClick={handlePrev} disabled={currentQuestion === 0} className="btn-prev text-white bg-blue-500 px-4 py-2 rounded-md">Prev</button>
+          <button onClick={handleNext} disabled={currentQuestion === questions.length - 1} className="btn-next text-white bg-blue-500 px-4 py-2 rounded-md">Next</button>
         </div>
       </div>
 
+      
       {/* Small Question Timeline */}
-      <div className="fixed top-4 right-4 bg-white p-2 shadow-md rounded-md flex items-center space-x-2">
-        <button onClick={() => setVisibleQuestions(prev => prev[0] > 0 ? prev.map(q => q - 1) : prev)}>
-          <FaChevronLeft />
-        </button>
-        {visibleQuestions.map((qIndex) => (
-          <div
-            key={qIndex}
-            className={`question-circle w-8 h-8 flex items-center justify-center rounded-full border-2 ${
-              answers[qIndex] !== undefined ? "bg-blue-500 text-white" : "border-gray-300"
-            }`}
-            onClick={() => setCurrentQuestion(qIndex)}
-          >
-            {qIndex + 1}
-          </div>
-        ))}
-        <button onClick={() => setVisibleQuestions(prev => prev[prev.length - 1] < questions.length - 1 ? prev.map(q => q + 1) : prev)}>
-          <FaChevronRight />
-        </button>
-        <button onClick={() => setShowTimelinePopup(true)} className="text-red-500">
-          <FaExclamationCircle />
-        </button>
-      </div>
+<div className="fixed-question-timeline">
+  <button onClick={() => setVisibleQuestions(prev => prev[0] > 0 ? prev.map(q => q - 1) : prev)}>
+    <FaChevronLeft />
+  </button>
+  {visibleQuestions.map((qIndex) => (
+    <div
+      key={qIndex}
+      className={`timeline-circle ${answers[qIndex] !== undefined ? "answered" : ""}`}
+      onClick={() => setCurrentQuestion(qIndex)}
+    >
+      {qIndex + 1}
+    </div>
+  ))}
+  <button onClick={() => setVisibleQuestions(prev => prev[prev.length - 1] < questions.length - 1 ? prev.map(q => q + 1) : prev)}>
+    <FaChevronRight />
+  </button>
+  <button onClick={() => setShowTimelinePopup(true)} className="text-red-500">
+    <FaExclamationCircle />
+  </button>
+</div>
 
-      {/* Submit & Exit Buttons */}
-      <div className="fixed bottom-4 w-full flex justify-between px-10">
-        <button onClick={() => navigate("/")} className="btn-exit">Exit</button>
-        <button onClick={handleSubmit} className="btn-submit">Submit</button>
-      </div>
 
       {/* Full Question Timeline Popup */}
       {showTimelinePopup && (
@@ -268,7 +269,7 @@ const Exam = () => {
               {fullTimelineVisibleQuestions.map((qIndex) => (
                 <div
                   key={qIndex}
-                  className={`question-circle w-10 h-10 flex items-center justify-center rounded-full border-2 ${
+                  className={`w-8 h-8 flex items-center justify-center rounded-full border-2 ${
                     answers[qIndex] !== undefined ? "bg-blue-500 text-white" : "border-gray-300"
                   }`}
                   onClick={() => setCurrentQuestion(qIndex)}
@@ -280,7 +281,12 @@ const Exam = () => {
                 <FaChevronRight />
               </button>
             </div>
-            <button onClick={() => setShowTimelinePopup(false)} className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md">Close</button>
+            <button
+              onClick={() => setShowTimelinePopup(false)}
+              className="mt-4 text-white bg-blue-500 px-4 py-2 rounded-md"
+            >
+              Close
+            </button>
           </div>
         </div>
       )}

@@ -1,4 +1,4 @@
-import React from "react";
+
 import { FaShoppingCart } from "react-icons/fa";
 import "../styles/Navbar.css";
 import Quess from '../assets/quesslogo.png';

@@ -1,5 +1,5 @@
 
-import { FaShoppingCart } from "react-icons/fa";
+import { FaRegUserCircle } from "react-icons/fa";
 import "../styles/Navbar.css";
 import Quess from '../assets/quesslogo.png';
 
@@ -9,7 +9,7 @@ const Navbar = () => {
       <img className="w-22 h-10 mr-2" src={Quess} alt="logo" />
     
       <div className="cart-icon">
-        <FaShoppingCart size={30} color="gray" />
+        <FaRegUserCircle size={30} color="gray" />
       </div>
     </nav>
   );

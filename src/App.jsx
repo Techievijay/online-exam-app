@@ -5,12 +5,14 @@ import Exam from './pages/Exam';
 import Navbar from './components/Navbar';
 import Signin from './pages/Signin';
 import Signup from './pages/Signup';
+import UserProfile from './pages/UserProfile';
 
 const App = () => {
   return (
     <Router>
       <Main />
     </Router>
+    // <UserProfile/>
   );
 };
 

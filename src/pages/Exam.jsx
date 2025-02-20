@@ -92,6 +92,8 @@ const Exam = () => {
   const handleVisibilityChange = () => {
     if (document.hidden) {
       if (tabSwitchAttempted) {
+        console.log('Exit from here........');
+        
         alert("You have been redirected due to multiple tab switches.");
         navigate("/"); 
       } else {

@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Signin from './pages/Signin';
 import Signup from './pages/Signup';
 import UserProfile from './pages/UserProfile';
+import AdminDashboard from './pages/AdminDashboard';
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const Main = () => {
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/exam/:id" element={<Exam />} />
+        <Route path='/dashboard' element={<AdminDashboard/>} />
       </Routes>
     </>
   );

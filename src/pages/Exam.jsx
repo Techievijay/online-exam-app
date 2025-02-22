@@ -3,13 +3,16 @@ import { useParams, useNavigate } from "react-router-dom";
 import { FaExclamationCircle, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "../styles/exampage.css";
 import Quess from '../assets/quesslogo.png';
+import { useAlert } from "../context/AlertContext";
 import { examCategories } from "../data/categories";
 import VideoRecord from '../components/VideoRecord';
+
 
 const categories = examCategories;
 
 const Exam = () => {
   const { id } = useParams();
+  const { showAlert } = useAlert();
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -19,6 +22,8 @@ const Exam = () => {
   const [fullTimelineVisibleQuestions, setFullTimelineVisibleQuestions] = useState([...Array(20).keys()]); // Full timeline (20)
   const examRef = useRef(null);
   const videoRef = useRef(null);
+  const tabSwitchAttempted = useRef(false);
+
   const category = categories.find((cat) => cat.id.toString() === id);
   if (!category) {
     navigate("/");
@@ -26,7 +31,7 @@ const Exam = () => {
   }
 
   const { questions, duration,title } = category;
-  let tabSwitchAttempted = false;
+
 
   const enterFullScreen = () => {
     if (examRef.current && !document.fullscreenElement) {
@@ -91,14 +96,13 @@ const Exam = () => {
 
   const handleVisibilityChange = () => {
     if (document.hidden) {
-      if (tabSwitchAttempted) {
-        console.log('Exit from here........');
-        
+      if (tabSwitchAttempted.current) {
         alert("You have been redirected due to multiple tab switches.");
-        navigate("/"); 
+        handleSubmit(); // Auto-submit the exam
       } else {
-        tabSwitchAttempted = true; 
-        alert("Warning: You are not allowed to switch tabs during the exam.");
+        tabSwitchAttempted.current = true;
+       
+        showAlert("Warning: You are not allowed to switch tabs during the exam.", "warning");
       }
     }
   };
@@ -118,7 +122,8 @@ const Exam = () => {
 
   const handleContextMenu = (event) => {
     event.preventDefault();
-    alert("Right-click is disabled during the exam.");
+   
+    showAlert("Right-click is disabled during the exam.", "failed");
   };
 
   const preventKeyShortcuts = (event) => {

@@ -35,12 +35,11 @@ const authSlice = createSlice({
   },
 });
 
-const selectedState = (state) => state.auth;
+const selectedState = (state) => state.auth || initialState;
 
-export const selectCurrentAuthState = createSelector(selectedState, (state) => state);
-export const selectUserLogged = createSelector(selectedState, (state) => state.isLogged);
-export const selectUserInfo = createSelector(selectedState, (state) => state.user);
+
 export const selectAuthLoading = createSelector(selectedState, (state) => state.isLoading);
 export const selectAuthError = createSelector(selectedState, (state) => state.error);
+export const { signupStart, signupSuccess, signupFailure, clearLogin } = authSlice.actions;
 
-export default authSlice;
+export default authSlice.reducer;

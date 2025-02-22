@@ -8,8 +8,9 @@ import { selectAuthLoading, selectAuthError } from "../redux/slices/authSlice";
 const Signup = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  //const isLoading = useSelector(selectAuthLoading);
-  //const error = useSelector(selectAuthError);
+  const isLoading = useSelector(selectAuthLoading);
+  const error = useSelector(selectAuthError);
+  
 
   const [formData, setFormData] = useState({
     email: "",
@@ -31,11 +32,11 @@ const Signup = () => {
 
   return (
     <div>
-      {/* {isLoading && (
+      {isLoading && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-white"></div>
         </div>
-      )} */}
+      )}
 
       <section className="bg-gray-50 light:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -47,9 +48,9 @@ const Signup = () => {
                 Create an account
               </h1>
 
-              {/* {error && (
+              {error && (
                 <p className="text-red-500 text-sm text-center">{error}</p>
-              )} */}
+              )}
 
               <form className="space-y-6" onSubmit={handleSubmit}>
                 <div>

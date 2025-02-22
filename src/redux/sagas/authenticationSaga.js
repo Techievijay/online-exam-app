@@ -1,19 +1,23 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import authSlice from "../slices/authSlice";
 import { EVENTS } from "../../utils/constant";
 import axios from "axios";
+import { signupStart, signupSuccess, signupFailure } from "../slices/authSlice"; 
 
 function* handleRegistration(action) {
   try {
-    const response = yield call(axios.post, "http://localhost:8000/api/v1/users/register", action.payload);
+    yield put(signupStart()); 
+    const response = yield call(
+      axios.post,
+      "http://localhost:8000/api/v1/users/register",
+      action.payload
+    );
 
     if (response.status === 201) {
-      yield put(authSlice.actions.loginSuccess({
-        user: response.data.data, // Store user data from response
-      }));
+      yield put(signupSuccess(response.data.data));
     }
   } catch (error) {
     console.error("Registration failed:", error.response?.data?.message || error.message);
+    yield put(signupFailure(error.response?.data?.message || "Registration failed")); 
   }
 }
 

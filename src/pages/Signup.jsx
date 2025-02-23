@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import Quess from "../assets/quesslogo.png";
 import { useDispatch, useSelector } from "react-redux";
 import { EVENTS } from "../utils/constant";
-import { selectAuthLoading, selectAuthError } from "../redux/slices/authSlice";
+import { selectAuthLoading, selectAuthError ,selectIsAuthenticated} from "../redux/slices/authSlice";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ const Signup = () => {
   const isLoading = useSelector(selectAuthLoading);
   const error = useSelector(selectAuthError);
   
-
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const [formData, setFormData] = useState({
     email: "",
     username: "",
@@ -25,10 +25,22 @@ const Signup = () => {
     });
   };
 
+ 
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch({ type: EVENTS.USER_SIGNUP, payload: formData });
+    dispatch({ type: EVENTS.USER_SIGNUP, payload: formData,navigate });
   };
+
+  // Navigate to Signin after successful signup
+ 
+
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     navigate("/signin");
+  //   }
+  // }, [isAuthenticated, navigate]);
+  
 
   return (
     <div>

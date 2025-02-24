@@ -23,7 +23,7 @@ const Signin = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch({ type: EVENTS.USER_SIGNIN, payload: formData,navigate }); // Dispatch login action
+    dispatch({ type: EVENTS.USER_SIGNIN, payload: formData,navigate }); 
   
 
   };

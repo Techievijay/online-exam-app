@@ -25,9 +25,9 @@ const authSlice = createSlice({
       state.user = action.payload;
       state.isLoading = false;
       state.error = null;
-      
-      localStorage.setItem("user", JSON.stringify(action.payload)); // ✅ Store user data
+      localStorage.setItem("user", JSON.stringify(action.payload)); 
     },
+    
     
     
     signupFailure: (state, action) => {
@@ -42,12 +42,12 @@ const authSlice = createSlice({
     },
     
     loginSuccess: (state, action) => {
-      state.isAuthenticated = true;  // ✅ User is logged in
+      state.isAuthenticated = true;  
       state.user = action.payload.user;
       state.isLoading = false;
-      localStorage.setItem("user", JSON.stringify(action.payload.user)); // ✅ Store user data
-      localStorage.setItem("accessToken", action.payload.accessToken); // ✅ Store access token
-      localStorage.setItem("refreshToken", action.payload.refreshToken); // ✅ Store refresh token
+      localStorage.setItem("user", JSON.stringify(action.payload.user)); 
+      localStorage.setItem("accessToken", action.payload.accessToken); 
+      localStorage.setItem("refreshToken", action.payload.refreshToken); 
     },
     
     loginFailure: (state, action) => {
@@ -55,7 +55,6 @@ const authSlice = createSlice({
       state.error = action.payload;
     },
 
-    // Logout & Clear State
     logout: (state) => {
       state.isAuthenticated = false;
       state.user = null;

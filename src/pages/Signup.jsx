@@ -29,8 +29,9 @@ const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch({ type: EVENTS.USER_SIGNUP, payload: formData,navigate });
+    dispatch({ type: EVENTS.USER_SIGNUP, payload: formData, navigate });
   };
+  
 
   // Navigate to Signin after successful signup
  

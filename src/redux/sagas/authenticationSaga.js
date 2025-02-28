@@ -38,7 +38,6 @@ function* handleLogin(action) {
     console.log("User attempting login:", email, password);
     console.log("Admin Credentials:", ADMIN_EMAIL, ADMIN_PASSWORD);
 
-    // 🔹 Skip API call for admin login
     if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
       console.log("Admin login detected. Logging in without API call.");
 
@@ -49,15 +48,14 @@ function* handleLogin(action) {
         role: "admin",
       };
 
-      // Store admin credentials in localStorage
       localStorage.setItem("user", JSON.stringify(adminUser));
       localStorage.setItem("accessToken", "adminAccessToken");
       localStorage.setItem("refreshToken", "adminRefreshToken");
 
-      // Dispatch success action
+   
       yield put(loginSuccess({ user: adminUser, accessToken: "adminAccessToken", refreshToken: "adminRefreshToken" }));
 
-      // Ensure navigate function exists before calling it
+     
       if (navigate) {
         yield call(navigate, "/dashboard");
       } else {
@@ -67,23 +65,23 @@ function* handleLogin(action) {
       return;
     }
 
-    // 🔹 Regular user login (API call)
+   
     const response = yield call(axios.post, `${API_URL}${API_REQUEST_PATH.USER_LOGIN}`, { email, password });
 
-    console.log("Login API response:", response); // Ensure correct response format
+    console.log("Login API response:", response);
 
     if (response.status === 200 && response.data?.data) {
       const { user, accessToken, refreshToken } = response.data.data;
 
-      // Store user credentials in localStorage
+     
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
 
-      // Dispatch success action
+     
       yield put(loginSuccess({ user, accessToken, refreshToken }));
 
-      // Ensure navigate function exists before calling it
+    
       if (navigate) {
         yield call(navigate, "/");
       } else {
@@ -108,25 +106,23 @@ function* handleLogout(action) {
     if (user?.role === "admin") {
       console.log("Admin logout detected. Skipping API call...");
 
-      // Clear all stored data
+    
       localStorage.removeItem("user");
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
 
-      // Dispatch logout success action
       yield put(logoutSuccess());
 
-      // Ensure navigate function exists before calling it
       if (action.payload?.navigate) {
         yield call(action.payload.navigate, "/signin");
       } else {
         console.warn("Navigate function is missing in action payload");
       }
 
-      return; // Exit early for admin logout
+      return; 
     }
 
-    // 🔹 Regular user logout (API call required)
+   
     const accessToken = localStorage.getItem("accessToken");
 
     if (!accessToken) {
@@ -139,15 +135,13 @@ function* handleLogout(action) {
       },
     });
 
-    // Clear all stored data
+    
     localStorage.removeItem("user");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-
-    // Dispatch logout success action
     yield put(logoutSuccess());
 
-    // Ensure navigate function exists before calling it
+  
     if (action.payload?.navigate) {
       yield call(action.payload.navigate, "/signin");
     } else {

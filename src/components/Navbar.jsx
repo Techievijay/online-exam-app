@@ -16,7 +16,7 @@ const Navbar = () => {
 
   const confirmLogout = () => {
     setShowModal(false);
-    navigate("/signin"); // Redirect to sign-in page
+    navigate("/signin"); 
   };
 
   return (
@@ -31,7 +31,7 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Confirmation Modal */}
+    
       {showModal && (
         <div className="modal-overlay">
           <div className="modal">

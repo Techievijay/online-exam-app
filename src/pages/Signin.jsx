@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { selectAuthLoading, selectAuthError, selectIsAuthenticated } from "../redux/slices/authSlice"; 
+import { selectAuthLoading, selectAuthError } from "../redux/slices/authSlice"; 
 import { EVENTS } from "../utils/constant";
 import Quess from "../assets/quesslogo.png";
 
@@ -10,7 +10,7 @@ const Signin = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectAuthLoading);
   const error = useSelector(selectAuthError);
-  const isAuthenticated = useSelector(selectIsAuthenticated); // Check authentication status
+  // const isAuthenticated = useSelector(selectIsAuthenticated); // Check authentication status
 
   const [formData, setFormData] = useState({
     email: "",

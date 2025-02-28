@@ -1,11 +1,21 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectIsAuthenticated } from "../redux/slices/authSlice";
+import { selectIsAuthenticated, selectUser } from "../redux/slices/authSlice";
 
 const PrivateRoute = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
+  const user = useSelector(selectUser);
+  const location = useLocation();
 
-  // If user is NOT logged in, redirect to /signin
+ 
+  if (user?.role === "admin" && location.pathname !== "/dashboard") {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  if (location.pathname === "/dashboard" && (!user?.role || user.role !== "admin")) {
+    return <Navigate to="/" replace />;
+  }
+
   return isAuthenticated ? <Outlet /> : <Navigate to="/signin" replace />;
 };
 

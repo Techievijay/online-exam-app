@@ -25,7 +25,7 @@ const AdminDashboard = () => {
         </button>
       </div>
 
-      {/* Categories Tab Content */}
+
       {activeTab === "categories" && (
         <div className="mt-4 bg-white p-4 shadow rounded-lg">
           <h2 className="text-xl font-semibold mb-4">Add Category</h2>
@@ -60,7 +60,6 @@ const AdminDashboard = () => {
         </div>
       )}
 
-      {/* Result Tab Content */}
       {activeTab === "result" && (
         <div className="mt-4 bg-white p-4 shadow rounded-lg">
           <h2 className="text-xl font-semibold mb-4">Results</h2>

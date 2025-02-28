@@ -185,10 +185,9 @@ const Exam = () => {
   return (
     <div className="exam-page flex flex-col" ref={examRef}>
       <VideoRecord ref={videoRef} />
-      
-      {/* Navbar */}
+
       <div className="navbar flex items-center justify-between bg-white p-4 shadow-md">
-        {/* Left Section: Logo, Title, and Subtitle */}
+
         <div className="flex flex-col">
           <div className="flex items-center">
         <img className="w-22 h-10 mr-2" src={Quess} alt="logo" />
@@ -199,7 +198,7 @@ const Exam = () => {
           </div>
         </div>
 
-        {/* Center Section: Timer and Question Progress */}
+      
         <div className="text-center">
           <h2 className="text-lg font-bold">
             Time Left: {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, "0")}
@@ -207,14 +206,13 @@ const Exam = () => {
           <progress value={progressPercentage} max={100} className="w-1/2 h-2 bg-gray-300 rounded-full mt-2" />
         </div>
 
-        {/* Right Section: Help and Submit Buttons */}
+     
         <div className="flex space-x-4">
   <a href="#help" className="btn-help">Help</a>
   <button onClick={handleSubmit} className="btn-submit">Submit</button>
 </div>
       </div>
 
-      {/* Exam Content */}
       <div className="exam-content w-full p-6 flex flex-col justify-center items-center mt-16">
         <div className="question-section w-full max-w-3xl">
           <p className="text-lg font-semibold">{currentQuestion + 1} / {questions.length} Questions</p>
@@ -233,7 +231,7 @@ const Exam = () => {
           ))}
         </div>
 
-        {/* Navigation Buttons */}
+
         <div className="navigation w-full max-w-3xl flex justify-between mt-4">
           <button onClick={handlePrev} disabled={currentQuestion === 0} className="btn-prev text-white bg-blue-500 px-4 py-2 rounded-md">Prev</button>
           <button onClick={handleNext} disabled={currentQuestion === questions.length - 1} className="btn-next text-white bg-blue-500 px-4 py-2 rounded-md">Next</button>
@@ -241,7 +239,7 @@ const Exam = () => {
       </div>
 
       
-      {/* Small Question Timeline */}
+   
 <div className="fixed-question-timeline">
   <button onClick={() => setVisibleQuestions(prev => prev[0] > 0 ? prev.map(q => q - 1) : prev)}>
     <FaChevronLeft />
@@ -264,7 +262,7 @@ const Exam = () => {
 </div>
 
 
-      {/* Full Question Timeline Popup */}
+    
       {showTimelinePopup && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-md">

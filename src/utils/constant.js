@@ -8,8 +8,8 @@ export const EVENTS = {
   };
   
   export const API_REQUEST_PATH = {
-    USER_REGISTER: '/api/v1/users/register',
-    USER_LOGIN:'/api/v1/users/login',
+    USER_REGISTER: '/users/register',
+    USER_LOGIN:'/users/login',
     USER_LOGOUT:'/api/v1/users/logout',
 
   };

@@ -1,5 +1,5 @@
-
-import { CiCircleCheck,CiCircleAlert  } from "react-icons/ci";
+import PropTypes from "prop-types";
+import { CiCircleCheck, CiCircleAlert } from "react-icons/ci";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 
 const AlertPopup = ({ message, type }) => {
@@ -11,7 +11,7 @@ const AlertPopup = ({ message, type }) => {
 
   const icons = {
     success: <CiCircleCheck className="text-green-500 w-5 h-5" />,
-    warning: <CiCircleAlert  className="text-orange-500 w-5 h-5" />,
+    warning: <CiCircleAlert className="text-orange-500 w-5 h-5" />,
     failed: <IoIosCloseCircleOutline className="text-red-500 w-5 h-5" />,
   };
 
@@ -21,6 +21,11 @@ const AlertPopup = ({ message, type }) => {
       <span className="text-sm font-medium">{message}</span>
     </div>
   );
+};
+
+AlertPopup.propTypes = {
+  message: PropTypes.string.isRequired,
+  type: PropTypes.oneOf(["success", "warning", "failed"]).isRequired,
 };
 
 export default AlertPopup;

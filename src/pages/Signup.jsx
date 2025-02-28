@@ -1,4 +1,4 @@
-import { useState ,useEffect} from "react";
+import { useState} from "react";
 import { useNavigate } from "react-router-dom";
 import Quess from "../assets/quesslogo.png";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +11,7 @@ const Signup = () => {
   const isLoading = useSelector(selectAuthLoading);
   const error = useSelector(selectAuthError);
   
-  const isAuthenticated = useSelector(selectIsAuthenticated);
+  //const isAuthenticated = useSelector(selectIsAuthenticated);
   const [formData, setFormData] = useState({
     email: "",
     username: "",

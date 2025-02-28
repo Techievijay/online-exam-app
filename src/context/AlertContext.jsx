@@ -1,16 +1,15 @@
-import { createContext, useContext, useState } from "react";
-import AlertPopup from "../components/AlertPopup"; // Import the AlertPopup component
-
-const AlertContext = createContext();
+import PropTypes from "prop-types";
+import { useState } from "react";
+import { AlertContext } from "./alertContext";
+import AlertPopup from "../components/AlertPopup";
 
 export const AlertProvider = ({ children }) => {
   const [alerts, setAlerts] = useState([]);
 
   const showAlert = (message, type) => {
-    const id = Date.now(); // Unique ID for each alert
+    const id = Date.now();
     setAlerts((prevAlerts) => [...prevAlerts, { id, message, type }]);
 
-    // Automatically remove the alert after 2 seconds
     setTimeout(() => {
       setAlerts((prevAlerts) => prevAlerts.filter((alert) => alert.id !== id));
     }, 5000);
@@ -28,4 +27,6 @@ export const AlertProvider = ({ children }) => {
   );
 };
 
-export const useAlert = () => useContext(AlertContext);
+AlertProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};

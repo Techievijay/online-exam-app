@@ -1,4 +1,4 @@
-/* General Styles */
+
 body, html {
     margin: 0;
     padding: 0;
@@ -6,7 +6,7 @@ body, html {
     background-color: #f5f5f5;
   }
   
-  /* Exam Page Container */
+ 
   .exam-page {
     display: flex;
     flex-direction: column;
@@ -15,8 +15,7 @@ body, html {
     align-items: center;
     background-color: #ffffff;
   }
-  
-  /* Navbar (Timer Section) */
+
   .navbar {
     display: flex;
     justify-content: space-between;
@@ -32,7 +31,7 @@ body, html {
     z-index: 1000;
   }
   
-  /* Left Section: Logo, Title, and Subtitle */
+
   .logo {
     width: 40px;
     height: 40px;
@@ -50,8 +49,7 @@ body, html {
     font-size: 14px;
     color: #777;
   }
-  
-  /* Timer Section */
+
   .navbar .text-center {
     text-align: center;
   }
@@ -71,7 +69,7 @@ body, html {
     background-color: #0094d9;
   }
   
-  /* Right Section: Help & Submit Buttons */
+ 
   .btn-help, .btn-submit {
     display: inline-block;
     padding: 8px 16px;
@@ -89,7 +87,7 @@ body, html {
     background-color: #007bb5;
   }
   
-  /* Exam Content Section */
+  
   .exam-content {
     display: flex;
     flex-direction: column;
@@ -97,11 +95,11 @@ body, html {
     width: 100%;
     min-height: 80vh;
     justify-content: center;
-    padding: 50px 20px 20px; /* Push content below navbar */
+    padding: 50px 20px 20px; 
     position: relative;
   }
   
-  /* Ensure questions and options are left-aligned */
+
   .question-section {
     width: 100%;
     max-width: 600px;
@@ -136,7 +134,7 @@ body, html {
     accent-color: #0094d9;
   }
   
-  /* Navigation Buttons */
+
   .navigation {
     display: flex;
     justify-content: flex-end;
@@ -169,10 +167,10 @@ body, html {
     background-color: #007bb5;
   }
   
-  /* Small Question Timeline (Fixed in Right Corner Above Exam Content) */
+
   .fixed-question-timeline {
     position: fixed;
-    top: 100px; /* Adjusted to be below the navbar */
+    top: 100px; 
     right: 20px;
     background: white;
     padding: 10px;
@@ -181,7 +179,7 @@ body, html {
     display: flex;
     align-items: center;
     gap: 8px;
-    z-index: 1100; /* Ensure it's above other elements */
+    z-index: 1100;
 }
 
   

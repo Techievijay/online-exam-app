@@ -25,6 +25,7 @@ const Navbar = () => {
     setShowModal(false);
     dispatch({ type: EVENTS.USER_SIGNOUT, payload: { navigate } });
   };
+console.log('ERROR HERE------------',error);
 
   return (
     <>

@@ -15,7 +15,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    // Signup Actions
+    // 🔹 Signup Actions
     signupStart: (state) => {
       state.isLoading = true;
       state.error = null;
@@ -27,47 +27,54 @@ const authSlice = createSlice({
       state.error = null;
       localStorage.setItem("user", JSON.stringify(action.payload)); 
     },
-    
-    
-    
     signupFailure: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
 
-    // Login Actions
+    // 🔹 Login Actions
     loginStart: (state) => {
       state.isLoading = true;
       state.error = null;
     },
-    
     loginSuccess: (state, action) => {
       state.isAuthenticated = true;  
       state.user = action.payload.user;
       state.isLoading = false;
+      state.error = null;
       localStorage.setItem("user", JSON.stringify(action.payload.user)); 
       localStorage.setItem("accessToken", action.payload.accessToken); 
       localStorage.setItem("refreshToken", action.payload.refreshToken); 
     },
-    
     loginFailure: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
 
-    logout: (state) => {
+    // 🔹 Logout Actions with Loading & Error Handling
+    logoutStart: (state) => {
+      state.isLoading = true;
+      state.error = null;
+    },
+    logoutSuccess: (state) => {
       state.isAuthenticated = false;
       state.user = null;
       state.isLoading = false;
       state.error = null;
+
+      // Clear localStorage
       localStorage.removeItem("user");
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
     },
+    logoutFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
   },
 });
 
-// Selectors
+// 🔹 Selectors for accessing state easily
 const selectAuthState = (state) => state.auth || initialState;
 
 export const selectAuthLoading = createSelector(selectAuthState, (state) => state.isLoading);
@@ -75,7 +82,7 @@ export const selectAuthError = createSelector(selectAuthState, (state) => state.
 export const selectUser = createSelector(selectAuthState, (state) => state.user);
 export const selectIsAuthenticated = createSelector(selectAuthState, (state) => state.isAuthenticated);
 
-// Actions
+// 🔹 Export Actions
 export const { 
   signupStart, 
   signupSuccess, 
@@ -83,7 +90,10 @@ export const {
   loginStart, 
   loginSuccess, 
   loginFailure, 
-  logout 
+  logoutStart, 
+  logoutSuccess, 
+  logoutFailure 
 } = authSlice.actions;
 
+// 🔹 Export Reducer
 export default authSlice.reducer;

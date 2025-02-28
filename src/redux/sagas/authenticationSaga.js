@@ -1,11 +1,9 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { API_REQUEST_PATH, EVENTS } from "../../utils/constant";
 import axios from "axios";
-import { signupStart, signupSuccess, signupFailure, loginStart, loginSuccess, loginFailure } from "../slices/authSlice"; 
+import { signupStart, signupSuccess, signupFailure, loginStart, loginSuccess, loginFailure,  logoutStart, logoutSuccess, logoutFailure } from "../slices/authSlice"; 
 const API_URL = import.meta.env.VITE_API_URL;
 
-
-console.log('REGISTER_API: ',`${API_URL}${API_REQUEST_PATH.USER_REGISTER}`);
 
 function* handleRegistration(action) {
   try {
@@ -77,6 +75,31 @@ function* handleLogin(action) {
   }
 }
 
+function* handleLogout(action) {
+  try {
+    yield put(logoutStart()); 
+
+    const accessToken = localStorage.getItem("accessToken");
+
+    if (!accessToken) {
+      throw new Error("No access token found");
+    }
+
+    yield call(axios.post, `${API_URL}${API_REQUEST_PATH.USER_LOGOUT}`, null, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      }
+    });
+
+    yield put(logoutSuccess());
+
+    yield call(action.payload.navigate, "/signin");
+  } catch (error) {
+    const errorMessage = error.response?.data?.message || "Logout failed!";
+    yield put(logoutFailure(errorMessage)); 
+  }
+}
+
 
 
   
@@ -84,6 +107,7 @@ function* handleLogin(action) {
 function* authenticationSaga() {
   yield takeEvery(EVENTS.USER_SIGNUP, handleRegistration);
   yield takeEvery(EVENTS.USER_SIGNIN, handleLogin);
+  yield takeEvery(EVENTS.USER_SIGNOUT, handleLogout); 
 }
 
 export default authenticationSaga;

@@ -3,8 +3,13 @@ import { Link } from 'react-router-dom';
 import { examCategories } from '../data/categories';
 
 
+
+
 const categories = examCategories;
 const Home = () => {
+  
+ 
+  
   return (
     <div className="home">
       
